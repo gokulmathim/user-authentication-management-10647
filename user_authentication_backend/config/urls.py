@@ -21,6 +21,13 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.views.decorators.csrf import csrf_exempt
 
+openapi_tags = [
+    {
+        "name": "Authentication",
+        "description": "User registration, login, logout, password reset, and session management"
+    }
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
@@ -28,12 +35,13 @@ urlpatterns = [
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="My API",
+      title="User Auth API",
       default_version='v1',
-      description="Test description",
+      description="Backend API for managing user authentication.",
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
+   tags=openapi_tags
 )
 
 def get_full_url(request):
@@ -51,12 +59,13 @@ def dynamic_schema_view(request, *args, **kwargs):
     url = get_full_url(request)
     view = get_schema_view(
         openapi.Info(
-            title="My API",
+            title="User Auth API",
             default_version='v1',
-            description="API Docs",
+            description="Backend API for authentication endpoints.",
         ),
         public=True,
         url=url,
+        tags=openapi_tags,
     )
     return view.with_ui('swagger', cache_timeout=0)(request)
 
